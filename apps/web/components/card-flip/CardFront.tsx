@@ -10,7 +10,7 @@ export function CardFront({ card }: CardFrontProps) {
   const gradient = THEME_GRADIENTS[card.theme]
 
   return (
-    <div className={`w-full h-full rounded-3xl bg-gradient-to-br ${gradient} flex flex-col p-7 shadow-2xl`}>
+    <div id="card-capture" className={`w-full h-full rounded-3xl bg-gradient-to-br ${gradient} flex flex-col p-7 shadow-2xl`}>
       {/* 顶部行 */}
       <div className="flex items-start justify-between">
         <div className="flex flex-col gap-1">

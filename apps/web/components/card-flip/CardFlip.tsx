@@ -12,7 +12,6 @@ export function CardFlip() {
 
   return (
     <div
-      id="card-capture"
       className="relative w-[320px] h-[480px] cursor-pointer select-none"
       style={{ perspective: '1200px' }}
       onClick={() => setIsFlipped(!isFlipped)}
