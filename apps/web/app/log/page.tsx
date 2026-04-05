@@ -39,8 +39,9 @@ export default function LogPage() {
       if (tab === 'mine') q = q.eq('user_id', user!.id)
       if (theme) q = q.eq('cards.theme', theme)
 
-      const { data } = await q
-      const rows = (data ?? []) as unknown as CheckInRecord[]
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const { data } = await (q as any)
+      const rows: CheckInRecord[] = data ?? []
       setRecords(rows)
 
       // 社区模式：批量拉取 profiles
