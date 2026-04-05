@@ -41,11 +41,15 @@ export function Header() {
           )}
           <button
             onClick={() => setShowCity(true)}
-            className="flex items-center gap-1 text-xs text-gray-500 hover:text-gray-800 transition-colors"
+            className={`flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-xl border transition-all ${
+              cityLabel
+                ? 'border-gray-200 text-gray-700 bg-white hover:border-gray-400'
+                : 'border-dashed border-gray-300 text-gray-400 hover:border-gray-400 hover:text-gray-600'
+            }`}
           >
             {isDetecting
               ? <span className="w-3 h-3 border-2 border-gray-300 border-t-gray-500 rounded-full animate-spin" />
-              : '📍'}
+              : <span>📍</span>}
             <span>{cityLabel ?? '选择城市'}</span>
           </button>
         </div>

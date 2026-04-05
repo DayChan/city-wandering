@@ -15,8 +15,14 @@ interface CitySelectorProps {
 
 const REGIONS = ['china', 'east-asia', 'north-america'] as const
 
+const SOURCE_LABEL: Record<string, string> = {
+  gps: 'GPS 定位',
+  ip: 'IP 推断',
+  manual: '手动选择',
+}
+
 export function CitySelector({ isOpen, onClose }: CitySelectorProps) {
-  const { city: currentCity, setManualCity, setDetected, setDetecting, reset } = useLocationStore()
+  const { city: currentCity, cityLabel: currentCityLabel, source, setManualCity, setDetected, setDetecting, reset } = useLocationStore()
   const [query, setQuery] = useState('')
   const [detecting, setLocalDetecting] = useState(false)
   const [gpsStatus, setGpsStatus] = useState<GPSStatus>('idle')
@@ -99,6 +105,31 @@ export function CitySelector({ isOpen, onClose }: CitySelectorProps) {
                   className="w-7 h-7 flex items-center justify-center rounded-full text-gray-400 hover:bg-gray-100 transition-all"
                 >✕</button>
               </div>
+
+              {/* 当前城市状态 */}
+              {currentCityLabel ? (
+                <div className="mx-5 mb-3 flex items-center justify-between px-3 py-2.5 bg-gray-50 rounded-xl">
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm">📍</span>
+                    <div>
+                      <span className="text-sm font-semibold text-gray-900">{currentCityLabel}</span>
+                      {source && (
+                        <span className="ml-2 text-xs text-gray-400">{SOURCE_LABEL[source]}</span>
+                      )}
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => { reset(); onClose() }}
+                    className="text-xs text-gray-400 hover:text-gray-600 transition-colors"
+                  >
+                    清除
+                  </button>
+                </div>
+              ) : (
+                <div className="mx-5 mb-3 px-3 py-2.5 bg-amber-50 rounded-xl">
+                  <p className="text-xs text-amber-600">📡 未检测到城市，请手动选择或点击自动检测</p>
+                </div>
+              )}
 
               {/* 搜索框 */}
               <div className="px-5 pb-3">

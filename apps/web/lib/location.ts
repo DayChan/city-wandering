@@ -36,15 +36,21 @@ export async function detectFromIP(): Promise<CityDef | null> {
       signal: AbortSignal.timeout(5000),
     })
     if (!res.ok) return null
-    const data: { city?: string; loc?: string } = await res.json()
+    const data: { city?: string; region?: string; loc?: string } = await res.json()
 
-    // 先尝试城市名关键词匹配
+    // 先尝试 city 字段关键词匹配（ipinfo 有时返回区县名如 "Pudong"）
     if (data.city) {
       const matched = matchCityFromIP(data.city)
       if (matched) return matched
     }
 
-    // 再尝试坐标最近邻匹配
+    // 再尝试 region 字段（省/州级，覆盖更广）
+    if (data.region) {
+      const matched = matchCityFromIP(data.region)
+      if (matched) return matched
+    }
+
+    // 最后用坐标最近邻匹配（兜底，精度最高）
     if (data.loc) {
       const [lat, lng] = data.loc.split(',').map(Number)
       return findNearestCity(lat, lng)
