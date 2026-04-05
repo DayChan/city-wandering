@@ -13,7 +13,7 @@ export function BadgeCollection() {
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    if (!user || !open) return
+    if (!user) return
     setLoading(true)
     const supabase = createClient()
     supabase
@@ -24,7 +24,7 @@ export function BadgeCollection() {
         setEarnedIds(new Set((data ?? []).map((r) => r.badge_id)))
         setLoading(false)
       })
-  }, [user, open])
+  }, [user])
 
   if (!user) return null
 
