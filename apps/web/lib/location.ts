@@ -78,14 +78,23 @@ export function detectFromGPS(): Promise<GPSResult | null> {
     navigator.geolocation.getCurrentPosition(
       (pos) => {
         const { latitude: lat, longitude: lng } = pos.coords
-        // GPS 精度高，用 300km 半径覆盖临近城市（如南京→上海）
+        console.log('[GPS] 定位成功', { lat, lng, accuracy: pos.coords.accuracy })
         const supported = findNearestCity(lat, lng, 300)
+        console.log('[GPS] 最近支持城市', supported?.label ?? '无（>300km）')
         resolve({
           supported,
           label: supported?.label ?? 'GPS 已定位',
         })
       },
-      () => resolve(null),
+      (err) => {
+        console.warn('[GPS] 定位失败', {
+          code: err.code,
+          // 1=PERMISSION_DENIED 2=POSITION_UNAVAILABLE 3=TIMEOUT
+          reason: ['', 'PERMISSION_DENIED', 'POSITION_UNAVAILABLE', 'TIMEOUT'][err.code],
+          message: err.message,
+        })
+        resolve(null)
+      },
       { timeout: 8000, maximumAge: 60000 }
     )
   })
