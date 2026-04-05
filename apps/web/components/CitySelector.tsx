@@ -6,6 +6,8 @@ import { CITIES, REGION_LABELS, type CityDef } from '@/lib/cities'
 import { detectFromGPS, detectFromIP } from '@/lib/location'
 import { useLocationStore } from '@/store/useLocationStore'
 
+type GPSStatus = 'idle' | 'requesting' | 'no-permission' | 'no-city' | 'ok'
+
 interface CitySelectorProps {
   isOpen: boolean
   onClose: () => void
@@ -17,6 +19,7 @@ export function CitySelector({ isOpen, onClose }: CitySelectorProps) {
   const { city: currentCity, setManualCity, setDetected, setDetecting, reset } = useLocationStore()
   const [query, setQuery] = useState('')
   const [detecting, setLocalDetecting] = useState(false)
+  const [gpsStatus, setGpsStatus] = useState<GPSStatus>('idle')
 
   const filtered = query.trim()
     ? CITIES.filter((c) => c.label.includes(query) || c.slug.includes(query.toLowerCase()))
@@ -28,13 +31,23 @@ export function CitySelector({ isOpen, onClose }: CitySelectorProps) {
   }
 
   async function handleGPS() {
+    setGpsStatus('requesting')
     setLocalDetecting(true)
     setDetecting(true)
     try {
-      const found = await (await import('@/lib/location')).detectFromGPS()
+      const found = await detectFromGPS()
       if (found) {
+        setGpsStatus('ok')
         setDetected(found.slug, found.label, 'gps')
         onClose()
+      } else {
+        // 区分「权限被拒」和「附近无支持城市」
+        const permDenied = await new Promise<boolean>((resolve) => {
+          navigator.permissions?.query({ name: 'geolocation' }).then((r) => {
+            resolve(r.state === 'denied')
+          }).catch(() => resolve(false))
+        })
+        setGpsStatus(permDenied ? 'no-permission' : 'no-city')
       }
     } finally {
       setLocalDetecting(false)
@@ -101,22 +114,32 @@ export function CitySelector({ isOpen, onClose }: CitySelectorProps) {
 
               {/* 自动检测选项 */}
               {!query && (
-                <div className="px-5 pb-2 flex gap-2">
-                  <button
-                    onClick={handleGPS}
-                    disabled={detecting}
-                    className="flex-1 flex items-center justify-center gap-1.5 py-2 text-xs font-medium text-gray-600 bg-gray-50 hover:bg-gray-100 rounded-xl transition-all disabled:opacity-50"
-                  >
-                    {detecting ? <span className="w-3 h-3 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin" /> : '📡'}
-                    GPS 定位
-                  </button>
-                  <button
-                    onClick={handleAutoIP}
-                    disabled={detecting}
-                    className="flex-1 flex items-center justify-center gap-1.5 py-2 text-xs font-medium text-gray-600 bg-gray-50 hover:bg-gray-100 rounded-xl transition-all disabled:opacity-50"
-                  >
-                    🌐 IP 自动检测
-                  </button>
+                <div className="px-5 pb-2">
+                  <div className="flex gap-2">
+                    <button
+                      onClick={handleGPS}
+                      disabled={detecting}
+                      className="flex-1 flex items-center justify-center gap-1.5 py-2 text-xs font-medium text-gray-600 bg-gray-50 hover:bg-gray-100 rounded-xl transition-all disabled:opacity-50"
+                    >
+                      {gpsStatus === 'requesting'
+                        ? <span className="w-3 h-3 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin" />
+                        : '📡'}
+                      GPS 定位
+                    </button>
+                    <button
+                      onClick={handleAutoIP}
+                      disabled={detecting}
+                      className="flex-1 flex items-center justify-center gap-1.5 py-2 text-xs font-medium text-gray-600 bg-gray-50 hover:bg-gray-100 rounded-xl transition-all disabled:opacity-50"
+                    >
+                      🌐 IP 自动检测
+                    </button>
+                  </div>
+                  {gpsStatus === 'no-permission' && (
+                    <p className="text-xs text-amber-600 mt-2 text-center">请在浏览器设置中允许位置权限后重试</p>
+                  )}
+                  {gpsStatus === 'no-city' && (
+                    <p className="text-xs text-gray-400 mt-2 text-center">当前位置暂无支持的城市，请手动选择</p>
+                  )}
                 </div>
               )}
 
