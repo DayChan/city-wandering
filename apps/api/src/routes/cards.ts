@@ -18,13 +18,14 @@ const querySchema = z.object({
   theme: themeEnum.optional(),
   city: z.string().optional(),
   difficulty: z.coerce.number().min(1).max(3).optional(),
+  bust: z.string().optional(), // 传任意值强制刷新缓存
 })
 
 export const cards = new Hono<{ Bindings: Env }>()
 
 // GET /cards/random?theme=food&city=universal
 cards.get('/random', zValidator('query', querySchema), async (c) => {
-  const { theme, city, difficulty } = c.req.valid('query')
+  const { theme, city, difficulty, bust } = c.req.valid('query')
 
   const redis = new Redis({
     url: c.env.UPSTASH_REDIS_REST_URL,
@@ -33,7 +34,7 @@ cards.get('/random', zValidator('query', querySchema), async (c) => {
 
   const cacheKey = `cards:ids:${theme ?? 'all'}:${city ?? 'all'}:${difficulty ?? 'all'}`
 
-  let cardIds: string[] | null = await redis.get(cacheKey)
+  let cardIds: string[] | null = bust ? null : await redis.get(cacheKey)
 
   const supabase = createClient(c.env.SUPABASE_URL, c.env.SUPABASE_SERVICE_ROLE_KEY)
 
@@ -48,7 +49,7 @@ cards.get('/random', zValidator('query', querySchema), async (c) => {
     if (!data || data.length === 0) return c.json({ data: null, error: 'No cards found' }, 404)
 
     cardIds = data.map((r) => r.id)
-    await redis.set(cacheKey, JSON.stringify(cardIds), { ex: 1800 })
+    await redis.set(cacheKey, JSON.stringify(cardIds), { ex: 300 })
   }
 
   const randomId = cardIds[Math.floor(Math.random() * cardIds.length)]
