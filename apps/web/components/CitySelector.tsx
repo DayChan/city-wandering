@@ -41,18 +41,19 @@ export function CitySelector({ isOpen, onClose }: CitySelectorProps) {
     setLocalDetecting(true)
     setDetecting(true)
     try {
-      const found = await detectFromGPS()
-      if (found) {
+      const result = await detectFromGPS()
+      if (result) {
+        // 有结果：无论是否在支持城市范围内都展示
+        const label = result.label ?? result.supported?.label ?? '未知位置'
+        setDetected(result.supported?.slug ?? null, label, 'gps')
         setGpsStatus('ok')
-        setDetected(found.slug, found.label, 'gps')
         onClose()
       } else {
-        // 区分「权限被拒」和「附近无支持城市」
-        const permDenied = await new Promise<boolean>((resolve) => {
-          navigator.permissions?.query({ name: 'geolocation' }).then((r) => {
-            resolve(r.state === 'denied')
-          }).catch(() => resolve(false))
-        })
+        // GPS 失败（权限拒绝或超时）
+        const permDenied = await navigator.permissions
+          ?.query({ name: 'geolocation' })
+          .then((r) => r.state === 'denied')
+          .catch(() => false) ?? false
         setGpsStatus(permDenied ? 'no-permission' : 'no-city')
       }
     } finally {

@@ -10,7 +10,7 @@ interface LocationState {
   isDetecting: boolean
 
   setManualCity: (slug: string, label: string) => void
-  setDetected: (slug: string, label: string, source: 'gps' | 'ip') => void
+  setDetected: (slug: string | null, label: string, source: 'gps' | 'ip') => void
   setDetecting: (v: boolean) => void
   reset: () => void         // clear manual selection, re-trigger auto detect
 }

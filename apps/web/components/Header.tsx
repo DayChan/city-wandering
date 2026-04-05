@@ -12,7 +12,7 @@ import { CitySelector } from './CitySelector'
 
 export function Header() {
   const { user } = useAuthStore()
-  const { cityLabel, isDetecting } = useLocationStore()
+  const { city, cityLabel, isDetecting } = useLocationStore()
   const [showAuth, setShowAuth] = useState(false)
   const [showCity, setShowCity] = useState(false)
   const pathname = usePathname()
@@ -50,7 +50,10 @@ export function Header() {
             {isDetecting
               ? <span className="w-3 h-3 border-2 border-gray-300 border-t-gray-500 rounded-full animate-spin" />
               : <span>📍</span>}
-            <span>{cityLabel ?? '选择城市'}</span>
+            <span>
+              {cityLabel ?? '选择城市'}
+              {cityLabel && !city && <span className="ml-1 text-gray-400 font-normal">(暂不支持)</span>}
+            </span>
           </button>
         </div>
 
