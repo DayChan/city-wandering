@@ -10,7 +10,13 @@ export function CardFront({ card }: CardFrontProps) {
   const gradient = THEME_GRADIENTS[card.theme]
 
   return (
-    <div id="card-capture" className={`w-full h-full rounded-3xl bg-gradient-to-br ${gradient} flex flex-col p-7 shadow-2xl`}>
+    <div id="card-capture" className={`relative w-full h-full rounded-3xl bg-gradient-to-br ${gradient} flex flex-col p-7 shadow-2xl`}>
+      {/* 地区专属角标 */}
+      {card.city !== 'universal' && (
+        <div className="absolute top-4 right-4 flex items-center gap-1 bg-white/20 backdrop-blur-sm text-white text-[10px] font-semibold px-2 py-1 rounded-full">
+          🏙️ 地区专属
+        </div>
+      )}
       {/* 顶部行 */}
       <div className="flex items-start justify-between">
         <div className="flex flex-col gap-1">

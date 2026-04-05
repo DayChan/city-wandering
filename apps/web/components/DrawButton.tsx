@@ -1,17 +1,19 @@
 'use client'
 
 import { useCardStore } from '@/store/useCardStore'
+import { useLocationStore } from '@/store/useLocationStore'
 import { cardApi } from '@/lib/api'
 
 export function DrawButton() {
   const { selectedTheme, currentCard, isLoading, setCurrentCard, setIsLoading, setError } =
     useCardStore()
+  const { city } = useLocationStore()
 
   async function handleDraw() {
     setIsLoading(true)
     setError(null)
     try {
-      const card = await cardApi.getRandom({ theme: selectedTheme ?? undefined })
+      const card = await cardApi.getRandom({ theme: selectedTheme ?? undefined, city: city ?? undefined })
       setCurrentCard(card)
     } catch (e) {
       setError(e instanceof Error ? e.message : '抽卡失败，请重试')

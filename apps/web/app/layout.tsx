@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Geist } from 'next/font/google'
 import { AuthProvider } from '@/components/AuthProvider'
+import { LocationProvider } from '@/components/LocationProvider'
 import { Header } from '@/components/Header'
 import './globals.css'
 
@@ -23,8 +24,10 @@ export default function RootLayout({
     <html lang="zh" className={`${geist.variable} h-full antialiased`}>
       <body className="min-h-full bg-gray-50 flex flex-col">
         <AuthProvider>
-          <Header />
-          {children}
+          <LocationProvider>
+            <Header />
+            {children}
+          </LocationProvider>
         </AuthProvider>
       </body>
     </html>

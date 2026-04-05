@@ -4,13 +4,17 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useAuthStore } from '@/store/useAuthStore'
+import { useLocationStore } from '@/store/useLocationStore'
 import { createClient } from '@/lib/supabase/browser'
 import { AuthModal } from './AuthModal'
 import { NotificationToggle } from './NotificationToggle'
+import { CitySelector } from './CitySelector'
 
 export function Header() {
   const { user } = useAuthStore()
+  const { cityLabel, isDetecting } = useLocationStore()
   const [showAuth, setShowAuth] = useState(false)
+  const [showCity, setShowCity] = useState(false)
   const pathname = usePathname()
 
   async function handleSignOut() {
@@ -21,7 +25,7 @@ export function Header() {
   return (
     <>
       <header className="w-full flex items-center justify-between px-6 py-4">
-        <div className="flex items-center gap-5">
+        <div className="flex items-center gap-4">
           <Link href="/" className="text-sm font-bold text-gray-900 hover:text-gray-600 transition-colors">
             陌生城市漫步卡
           </Link>
@@ -35,6 +39,15 @@ export function Header() {
               漫步日志
             </Link>
           )}
+          <button
+            onClick={() => setShowCity(true)}
+            className="flex items-center gap-1 text-xs text-gray-500 hover:text-gray-800 transition-colors"
+          >
+            {isDetecting
+              ? <span className="w-3 h-3 border-2 border-gray-300 border-t-gray-500 rounded-full animate-spin" />
+              : '📍'}
+            <span>{cityLabel ?? '选择城市'}</span>
+          </button>
         </div>
 
         {user ? (
@@ -59,6 +72,7 @@ export function Header() {
       </header>
 
       <AuthModal isOpen={showAuth} onClose={() => setShowAuth(false)} />
+      <CitySelector isOpen={showCity} onClose={() => setShowCity(false)} />
     </>
   )
 }
