@@ -40,7 +40,7 @@ export default function LogPage() {
       if (theme) q = q.eq('cards.theme', theme)
 
       const { data } = await q
-      const rows = (data ?? []) as CheckInRecord[]
+      const rows = (data ?? []) as unknown as CheckInRecord[]
       setRecords(rows)
 
       // 社区模式：批量拉取 profiles

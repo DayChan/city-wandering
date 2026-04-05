@@ -68,7 +68,7 @@ export function CheckInModal({ isOpen, onClose, card }: CheckInModalProps) {
     const totalCount = checkIns.length
     const themeCounts: Partial<Record<Theme, number>> = {}
     for (const ci of checkIns) {
-      const theme = (ci.cards as { theme: Theme } | null)?.theme
+      const theme = (ci.cards as unknown as { theme: Theme } | null)?.theme
       if (theme) themeCounts[theme] = (themeCounts[theme] ?? 0) + 1
     }
 
