@@ -6,7 +6,7 @@ import { CITIES, REGION_LABELS, type CityDef } from '@/lib/cities'
 import { detectFromGPS, detectFromIP } from '@/lib/location'
 import { useLocationStore } from '@/store/useLocationStore'
 
-type GPSStatus = 'idle' | 'requesting' | 'no-permission' | 'no-city' | 'ok'
+type GPSStatus = 'idle' | 'requesting' | 'no-permission' | 'gps-error' | 'ok'
 
 interface CitySelectorProps {
   isOpen: boolean
@@ -43,18 +43,16 @@ export function CitySelector({ isOpen, onClose }: CitySelectorProps) {
     try {
       const result = await detectFromGPS()
       if (result) {
-        // 有结果：无论是否在支持城市范围内都展示
-        const label = result.label ?? result.supported?.label ?? '未知位置'
-        setDetected(result.supported?.slug ?? null, label, 'gps')
+        setDetected(result.supported?.slug ?? null, result.label, 'gps')
         setGpsStatus('ok')
         onClose()
       } else {
-        // GPS 失败（权限拒绝或超时）
+        // GPS 返回 null：权限拒绝或定位超时
         const permDenied = await navigator.permissions
           ?.query({ name: 'geolocation' })
           .then((r) => r.state === 'denied')
           .catch(() => false) ?? false
-        setGpsStatus(permDenied ? 'no-permission' : 'no-city')
+        setGpsStatus(permDenied ? 'no-permission' : 'gps-error')
       }
     } finally {
       setLocalDetecting(false)
@@ -169,8 +167,8 @@ export function CitySelector({ isOpen, onClose }: CitySelectorProps) {
                   {gpsStatus === 'no-permission' && (
                     <p className="text-xs text-amber-600 mt-2 text-center">请在浏览器设置中允许位置权限后重试</p>
                   )}
-                  {gpsStatus === 'no-city' && (
-                    <p className="text-xs text-gray-400 mt-2 text-center">当前位置暂无支持的城市，请手动选择</p>
+                  {gpsStatus === 'gps-error' && (
+                    <p className="text-xs text-gray-400 mt-2 text-center">定位失败，请检查设备 GPS 是否开启</p>
                   )}
                 </div>
               )}

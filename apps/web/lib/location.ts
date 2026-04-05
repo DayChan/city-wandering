@@ -61,27 +61,11 @@ export async function detectFromIP(): Promise<CityDef | null> {
   }
 }
 
-/** 反向地理编码：坐标 → 城市名（Nominatim，中文优先） */
-export async function reverseGeocode(lat: number, lng: number): Promise<string | null> {
-  try {
-    const res = await fetch(
-      `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&accept-language=zh-CN,zh`,
-      { signal: AbortSignal.timeout(5000), headers: { 'Accept-Language': 'zh-CN,zh' } }
-    )
-    if (!res.ok) return null
-    const data: { address?: { city?: string; town?: string; county?: string; state?: string } } = await res.json()
-    const addr = data.address
-    return addr?.city ?? addr?.town ?? addr?.county ?? addr?.state ?? null
-  } catch {
-    return null
-  }
-}
-
 export interface GPSResult {
   /** 匹配到的支持城市（用于 API 过滤），未匹配时为 null */
   supported: CityDef | null
-  /** 展示用城市名（reverse geocode 结果或支持城市名） */
-  label: string | null
+  /** 展示用城市名 */
+  label: string
 }
 
 /** 通过浏览器 GPS 定位（需用户授权） */
@@ -92,16 +76,14 @@ export function detectFromGPS(): Promise<GPSResult | null> {
       return
     }
     navigator.geolocation.getCurrentPosition(
-      async (pos) => {
+      (pos) => {
         const { latitude: lat, longitude: lng } = pos.coords
-        const supported = findNearestCity(lat, lng)
-        if (supported) {
-          resolve({ supported, label: supported.label })
-        } else {
-          // 不在支持范围内：反向地理编码拿真实城市名
-          const raw = await reverseGeocode(lat, lng)
-          resolve({ supported: null, label: raw })
-        }
+        // GPS 精度高，用 300km 半径覆盖临近城市（如南京→上海）
+        const supported = findNearestCity(lat, lng, 300)
+        resolve({
+          supported,
+          label: supported?.label ?? 'GPS 已定位',
+        })
       },
       () => resolve(null),
       { timeout: 8000, maximumAge: 60000 }
