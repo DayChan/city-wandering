@@ -29,17 +29,18 @@ class LogViewModel: ObservableObject {
         isLoading = true
         defer { isLoading = false }
         do {
-            var query = supabase
+            var filterBuilder = supabase
                 .from("check_ins")
                 .select("id, note, created_at, cards(title, theme)")
                 .eq("user_id", value: userId)
-                .order("created_at", ascending: false)
 
             if let theme = selectedTheme {
-                query = query.eq("cards.theme", value: theme.rawValue)
+                filterBuilder = filterBuilder.eq("cards.theme", value: theme.rawValue)
             }
 
-            checkIns = try await query.execute().value
+            checkIns = try await filterBuilder
+                .order("created_at", ascending: false)
+                .execute().value
         } catch {
             print("[LogView] load error:", error)
         }
