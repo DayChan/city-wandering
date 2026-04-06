@@ -10,3 +10,4 @@ dist/
 apps/ios/*.xcodeproj/project.xcworkspace/xcuserdata/
 apps/ios/*.xcodeproj/xcuserdata/
 apps/ios/DerivedData/
+apps/ios/CityWandering/Sources/Services/SupabaseService.swift
