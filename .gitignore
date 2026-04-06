@@ -5,3 +5,8 @@ dist/
 .dev.vars
 .wrangler/
 *.tsbuildinfo
+
+# iOS
+apps/ios/*.xcodeproj/project.xcworkspace/xcuserdata/
+apps/ios/*.xcodeproj/xcuserdata/
+apps/ios/DerivedData/
