@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2EC615B374BFEB812DAA87BA /* CardShareSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 168F4270006E4844FBCBB701 /* CardShareSheet.swift */; };
+		331F1E4F5306CDB861B1987A /* CheckInSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A0E44BAB32C667351FCCE2C /* CheckInSheet.swift */; };
 		42AA8E39EF1E6C8F909D4ED1 /* City.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1558A29F3F0F5A9D78262E8 /* City.swift */; };
 		434E6402C41011BE04AB1572 /* AuthStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C9674462EBD95BDC6CEF04A /* AuthStore.swift */; };
 		528F61EE33ECDC8A33C6DF99 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 037EE019A14CBCE4C0820FFC /* RootView.swift */; };
@@ -30,10 +32,12 @@
 		037EE019A14CBCE4C0820FFC /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		0EBB649ACD46D0B3F4315E75 /* CardService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardService.swift; sourceTree = "<group>"; };
 		14DAD80F90AADD790CF6AD9C /* AuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthView.swift; sourceTree = "<group>"; };
+		168F4270006E4844FBCBB701 /* CardShareSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardShareSheet.swift; sourceTree = "<group>"; };
 		1D2BA5626288BBEE9C287BE2 /* CityWandering.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = CityWandering.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2C9674462EBD95BDC6CEF04A /* AuthStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthStore.swift; sourceTree = "<group>"; };
 		36F346A10E1E7015270B34A2 /* CityPillButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CityPillButton.swift; sourceTree = "<group>"; };
 		39665B5664D671EA9B45BD9A /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		3A0E44BAB32C667351FCCE2C /* CheckInSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckInSheet.swift; sourceTree = "<group>"; };
 		3BA8BD8386D7D93574188609 /* LocationStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationStore.swift; sourceTree = "<group>"; };
 		3F3A0E29A95E28F57811A876 /* LogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogView.swift; sourceTree = "<group>"; };
 		40984F9A8CC11CF435A243B7 /* CardFlipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardFlipView.swift; sourceTree = "<group>"; };
@@ -166,6 +170,8 @@
 			isa = PBXGroup;
 			children = (
 				40984F9A8CC11CF435A243B7 /* CardFlipView.swift */,
+				168F4270006E4844FBCBB701 /* CardShareSheet.swift */,
+				3A0E44BAB32C667351FCCE2C /* CheckInSheet.swift */,
 			);
 			path = Card;
 			sourceTree = "<group>";
@@ -260,6 +266,8 @@
 				B756E2340941D1F8681DBB6D /* Card.swift in Sources */,
 				9D048E6576CCE5CB3A5EE529 /* CardFlipView.swift in Sources */,
 				FAB60272F44A32FD7241D6B5 /* CardService.swift in Sources */,
+				2EC615B374BFEB812DAA87BA /* CardShareSheet.swift in Sources */,
+				331F1E4F5306CDB861B1987A /* CheckInSheet.swift in Sources */,
 				42AA8E39EF1E6C8F909D4ED1 /* City.swift in Sources */,
 				5D7BBBBF8E354DF557181608 /* CityPillButton.swift in Sources */,
 				6F595AD0A3FF0D87E4F523E6 /* CitySelectorView.swift in Sources */,
