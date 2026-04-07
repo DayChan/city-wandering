@@ -65,7 +65,7 @@ struct CardSharePreview: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             HStack {
-                Text(card.theme.emoji).font(.title2)
+                Image(systemName: card.theme.symbolName).font(.title2).foregroundStyle(.white)
                 Text(card.theme.label)
                     .font(.caption)
                     .fontWeight(.semibold)

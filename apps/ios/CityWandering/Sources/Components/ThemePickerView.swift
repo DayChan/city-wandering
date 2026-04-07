@@ -11,7 +11,7 @@ struct ThemePickerView: View {
                         selected = theme
                     } label: {
                         HStack(spacing: 4) {
-                            Text(theme.emoji)
+                            Image(systemName: theme.symbolName)
                                 .font(.caption)
                             Text(theme.label)
                                 .font(.subheadline)

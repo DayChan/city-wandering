@@ -19,14 +19,14 @@ enum Theme: String, Codable, CaseIterable {
         }
     }
 
-    var emoji: String {
+    var symbolName: String {
         switch self {
-        case .food: return "🍜"
-        case .architecture: return "🏛️"
-        case .culture: return "🎭"
-        case .nature: return "🌿"
-        case .colorWalk: return "🎨"
-        case .random: return "🎲"
+        case .food: return "fork.knife"
+        case .architecture: return "building.columns.fill"
+        case .culture: return "theatermasks.fill"
+        case .nature: return "leaf.fill"
+        case .colorWalk: return "paintpalette.fill"
+        case .random: return "dice.fill"
         }
     }
 }

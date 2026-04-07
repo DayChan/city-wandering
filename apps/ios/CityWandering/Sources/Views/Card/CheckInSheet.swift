@@ -68,7 +68,7 @@ struct CheckInSheet: View {
                     // 卡片预览
                     VStack(alignment: .leading, spacing: 8) {
                         HStack {
-                            Text(card.theme.emoji)
+                            Image(systemName: card.theme.symbolName)
                             Text(card.theme.label)
                                 .font(.caption)
                                 .foregroundStyle(.secondary)

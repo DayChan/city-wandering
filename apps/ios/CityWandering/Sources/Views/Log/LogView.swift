@@ -179,7 +179,9 @@ struct MyLogView: View {
         Menu {
             Button("全部") { vm.selectedTheme = nil }
             ForEach(Theme.allCases.filter { $0 != .random }, id: \.self) { theme in
-                Button("\(theme.emoji) \(theme.label)") { vm.selectedTheme = theme }
+                Button { vm.selectedTheme = theme } label: {
+                Label(theme.label, systemImage: theme.symbolName)
+            }
             }
         } label: {
             Image(systemName: "line.3.horizontal.decrease.circle")
@@ -225,7 +227,7 @@ struct CheckInRow: View {
         VStack(alignment: .leading, spacing: 8) {
             if let card = checkIn.cards {
                 HStack(spacing: 6) {
-                    Text(card.theme.emoji)
+                    Image(systemName: card.theme.symbolName)
                     Text(card.title)
                         .font(.subheadline)
                         .fontWeight(.medium)
@@ -290,7 +292,7 @@ struct CommunityRow: View {
             }
             if let card = checkIn.cards {
                 HStack(spacing: 6) {
-                    Text(card.theme.emoji)
+                    Image(systemName: card.theme.symbolName)
                     Text(card.title)
                         .font(.subheadline)
                         .fontWeight(.medium)

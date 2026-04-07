@@ -70,8 +70,9 @@ struct CardFrontView: View {
             // 顶部
             HStack(alignment: .top) {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text(card.theme.emoji)
-                        .font(.system(size: 32))
+                    Image(systemName: card.theme.symbolName)
+                        .font(.system(size: 28))
+                        .foregroundStyle(.white)
                     Text(card.theme.label)
                         .font(.caption)
                         .fontWeight(.semibold)
