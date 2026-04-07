@@ -119,10 +119,10 @@ struct CardFrontView: View {
             .padding(.bottom, 20)
         }
         .frame(maxWidth: .infinity)
-        .frame(height: 280)
+        .frame(maxHeight: .infinity)
         .background(card.theme.cardGradient)
-        .clipShape(RoundedRectangle(cornerRadius: 24))
-        .shadow(color: .black.opacity(0.15), radius: 20, y: 6)
+        .clipShape(RoundedRectangle(cornerRadius: 28))
+        .shadow(color: .black.opacity(0.18), radius: 24, y: 8)
     }
 }
 
@@ -144,11 +144,11 @@ struct CardBackView: View {
                 .padding(.horizontal, 8)
         }
         .frame(maxWidth: .infinity)
-        .frame(height: 280)
-        .padding(24)
+        .frame(maxHeight: .infinity)
+        .padding(28)
         .background(Color(uiColor: .secondarySystemBackground))
-        .clipShape(RoundedRectangle(cornerRadius: 24))
-        .shadow(color: .black.opacity(0.08), radius: 20, y: 6)
+        .clipShape(RoundedRectangle(cornerRadius: 28))
+        .shadow(color: .black.opacity(0.08), radius: 24, y: 8)
     }
 }
 
@@ -165,11 +165,11 @@ struct CardPlaceholderView: View {
                 .foregroundStyle(.secondary)
         }
         .frame(maxWidth: .infinity)
-        .frame(height: 280)
+        .frame(maxHeight: .infinity)
         .background(Color(uiColor: .systemBackground))
-        .clipShape(RoundedRectangle(cornerRadius: 24))
+        .clipShape(RoundedRectangle(cornerRadius: 28))
         .overlay(
-            RoundedRectangle(cornerRadius: 24)
+            RoundedRectangle(cornerRadius: 28)
                 .strokeBorder(style: StrokeStyle(lineWidth: 1.5, dash: [6]))
                 .foregroundStyle(Color.secondary.opacity(0.3))
         )

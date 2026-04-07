@@ -33,7 +33,7 @@
 		0EBB649ACD46D0B3F4315E75 /* CardService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardService.swift; sourceTree = "<group>"; };
 		14DAD80F90AADD790CF6AD9C /* AuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthView.swift; sourceTree = "<group>"; };
 		168F4270006E4844FBCBB701 /* CardShareSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardShareSheet.swift; sourceTree = "<group>"; };
-		1D2BA5626288BBEE9C287BE2 /* CityWandering.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = CityWandering.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1D2BA5626288BBEE9C287BE2 /* CityWandering.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CityWandering.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2C9674462EBD95BDC6CEF04A /* AuthStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthStore.swift; sourceTree = "<group>"; };
 		36F346A10E1E7015270B34A2 /* CityPillButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CityPillButton.swift; sourceTree = "<group>"; };
 		39665B5664D671EA9B45BD9A /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
@@ -295,6 +295,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = CNK2947SK9;
 				INFOPLIST_FILE = CityWandering/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -431,10 +432,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGNING_REQUIRED = NO;
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = CNK2947SK9;
 				INFOPLIST_FILE = CityWandering/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
