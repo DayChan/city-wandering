@@ -91,7 +91,8 @@ struct HomeView: View {
                             if vm.isLoading {
                                 ProgressView().tint(.white).scaleEffect(0.8)
                             } else {
-                                Text(vm.card == nil ? "🎴 抽一张" : "再抽一张")
+                                Label(vm.card == nil ? "抽一张" : "再抽一张",
+                                      systemImage: "rectangle.on.rectangle.angled")
                             }
                         }
                         .frame(maxWidth: .infinity)

@@ -157,8 +157,9 @@ struct CardBackView: View {
 struct CardPlaceholderView: View {
     var body: some View {
         VStack(spacing: 12) {
-            Text("🎴")
-                .font(.system(size: 52))
+            Image(systemName: "rectangle.on.rectangle.angled")
+                .font(.system(size: 48))
+                .foregroundStyle(.tertiary)
             Text("选好主题，点击下方抽卡")
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
