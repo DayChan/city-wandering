@@ -27,14 +27,9 @@ struct CommunityCheckIn: Identifiable, Decodable {
     let photoUrl: String?
     let createdAt: String
     let cards: CheckIn.CardRef?
-    let profiles: Profile?
-
-    struct Profile: Decodable {
-        let email: String?
-    }
 
     enum CodingKeys: String, CodingKey {
-        case id, note, profiles
+        case id, note
         case photoUrl = "photo_url"
         case createdAt = "created_at"
         case cards
@@ -85,7 +80,7 @@ class CommunityViewModel: ObservableObject {
         do {
             var filterBuilder = supabase
                 .from("check_ins")
-                .select("id, note, photo_url, created_at, cards(title, theme), profiles(email)")
+                .select("id, note, photo_url, created_at, cards(title, theme)")
 
             if let theme = selectedTheme {
                 filterBuilder = filterBuilder.eq("cards.theme", value: theme.rawValue)
@@ -95,8 +90,9 @@ class CommunityViewModel: ObservableObject {
                 .order("created_at", ascending: false)
                 .limit(50)
                 .execute().value
+            print("[Community] loaded \(checkIns.count) items")
         } catch {
-            print("[CommunityView] load error:", error)
+            print("[Community] load error:", error)
         }
     }
 }
@@ -173,7 +169,7 @@ struct MyLogView: View {
             }
         }
         .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
+            ToolbarItem(placement: .topBarLeading) {
                 themeMenu
             }
         }
@@ -234,6 +230,7 @@ struct CommunityView: View {
 
 struct CheckInRow: View {
     let checkIn: CheckIn
+    @State private var fullscreenURL: URL? = nil
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -255,6 +252,7 @@ struct CheckInRow: View {
                             .frame(maxWidth: .infinity)
                             .frame(height: 160)
                             .clipShape(RoundedRectangle(cornerRadius: 12))
+                            .onTapGesture { fullscreenURL = url }
                     case .failure:
                         EmptyView()
                     default:
@@ -263,6 +261,9 @@ struct CheckInRow: View {
                             .frame(height: 160)
                             .overlay(ProgressView())
                     }
+                }
+                .fullScreenCover(item: $fullscreenURL) { url in
+                    PhotoFullscreenView(url: url)
                 }
             }
             if let note = checkIn.note, !note.isEmpty {
@@ -281,20 +282,14 @@ struct CheckInRow: View {
 
 struct CommunityRow: View {
     let checkIn: CommunityCheckIn
-
-    var displayName: String {
-        if let email = checkIn.profiles?.email {
-            return String(email.split(separator: "@").first ?? "漫游者")
-        }
-        return "漫游者"
-    }
+    @State private var communityFullscreenURL: URL? = nil
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
                 Image(systemName: "person.circle.fill")
                     .foregroundStyle(.secondary)
-                Text(displayName)
+                Text("漫游者")
                     .font(.caption)
                     .foregroundStyle(.secondary)
                 Spacer()
@@ -320,6 +315,7 @@ struct CommunityRow: View {
                             .frame(maxWidth: .infinity)
                             .frame(height: 200)
                             .clipShape(RoundedRectangle(cornerRadius: 12))
+                            .onTapGesture { communityFullscreenURL = url }
                     case .failure:
                         EmptyView()
                     default:
@@ -329,6 +325,9 @@ struct CommunityRow: View {
                             .overlay(ProgressView())
                     }
                 }
+                .fullScreenCover(item: $communityFullscreenURL) { url in
+                    PhotoFullscreenView(url: url)
+                }
             }
             if let note = checkIn.note, !note.isEmpty {
                 Text(note)
@@ -337,5 +336,41 @@ struct CommunityRow: View {
             }
         }
         .padding(.vertical, 6)
+    }
+}
+
+// MARK: - Fullscreen Photo
+
+extension URL: @retroactive Identifiable {
+    public var id: String { absoluteString }
+}
+
+struct PhotoFullscreenView: View {
+    let url: URL
+    @Environment(\.dismiss) private var dismiss
+
+    var body: some View {
+        ZStack(alignment: .topTrailing) {
+            Color.black.ignoresSafeArea()
+            AsyncImage(url: url) { phase in
+                switch phase {
+                case .success(let img):
+                    img.resizable()
+                        .scaledToFit()
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                default:
+                    ProgressView().tint(.white)
+                }
+            }
+            Button {
+                dismiss()
+            } label: {
+                Image(systemName: "xmark.circle.fill")
+                    .font(.title2)
+                    .foregroundStyle(.white)
+                    .padding()
+            }
+        }
+        .onTapGesture { dismiss() }
     }
 }
