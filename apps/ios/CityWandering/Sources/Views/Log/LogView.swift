@@ -350,19 +350,19 @@ private func coverImage(url: URL?, symbol: String?) -> some View {
         AsyncImage(url: url) { phase in
             switch phase {
             case .success(let img):
-                img.resizable().scaledToFill()
+                img.resizable()
+                    .scaledToFit()
+                    .frame(maxWidth: .infinity)
             default:
                 Color(uiColor: .secondarySystemBackground)
+                    .aspectRatio(4/3, contentMode: .fit)
                     .overlay(ProgressView())
             }
         }
-        .frame(maxWidth: .infinity)
-        .frame(height: 160)
         .clipShape(UnevenRoundedRectangle(topLeadingRadius: 14, topTrailingRadius: 14))
     } else {
         Color(uiColor: .secondarySystemBackground)
-            .frame(maxWidth: .infinity)
-            .frame(height: 110)
+            .aspectRatio(1, contentMode: .fit)
             .clipShape(UnevenRoundedRectangle(topLeadingRadius: 14, topTrailingRadius: 14))
             .overlay {
                 if let symbol {
