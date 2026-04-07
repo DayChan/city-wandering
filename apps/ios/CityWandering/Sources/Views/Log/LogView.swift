@@ -86,7 +86,6 @@ class CommunityViewModel: ObservableObject {
             var filterBuilder = supabase
                 .from("check_ins")
                 .select("id, note, photo_url, created_at, cards(title, theme), profiles(email)")
-                .limit(50)
 
             if let theme = selectedTheme {
                 filterBuilder = filterBuilder.eq("cards.theme", value: theme.rawValue)
@@ -94,6 +93,7 @@ class CommunityViewModel: ObservableObject {
 
             checkIns = try await filterBuilder
                 .order("created_at", ascending: false)
+                .limit(50)
                 .execute().value
         } catch {
             print("[CommunityView] load error:", error)
