@@ -230,112 +230,229 @@ struct CommunityView: View {
 
 struct CheckInRow: View {
     let checkIn: CheckIn
-    @State private var fullscreenURL: URL? = nil
+    @State private var showDetail = false
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            if let card = checkIn.cards {
-                HStack(spacing: 6) {
-                    Image(systemName: card.theme.symbolName)
-                    Text(card.title)
-                        .font(.subheadline)
-                        .fontWeight(.medium)
-                        .lineLimit(2)
-                }
-            }
-            if let photoUrl = checkIn.photoUrl, let url = URL(string: photoUrl) {
-                AsyncImage(url: url) { phase in
-                    switch phase {
-                    case .success(let img):
-                        img.resizable()
-                            .scaledToFill()
-                            .frame(maxWidth: .infinity)
-                            .frame(height: 160)
-                            .clipShape(RoundedRectangle(cornerRadius: 12))
-                            .onTapGesture { fullscreenURL = url }
-                    case .failure:
-                        EmptyView()
-                    default:
-                        RoundedRectangle(cornerRadius: 12)
-                            .fill(Color(uiColor: .secondarySystemBackground))
-                            .frame(height: 160)
-                            .overlay(ProgressView())
+        Button { showDetail = true } label: {
+            HStack(spacing: 12) {
+                // 缩略图或主题图标
+                if let photoUrl = checkIn.photoUrl, let url = URL(string: photoUrl) {
+                    AsyncImage(url: url) { phase in
+                        if case .success(let img) = phase {
+                            img.resizable().scaledToFill()
+                        } else {
+                            Color(uiColor: .secondarySystemBackground)
+                        }
                     }
+                    .frame(width: 60, height: 60)
+                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                } else if let card = checkIn.cards {
+                    RoundedRectangle(cornerRadius: 10)
+                        .fill(Color(uiColor: .secondarySystemBackground))
+                        .frame(width: 60, height: 60)
+                        .overlay(Image(systemName: card.theme.symbolName).foregroundStyle(.secondary))
                 }
-                .fullScreenCover(item: $fullscreenURL) { url in
-                    PhotoFullscreenView(url: url)
+
+                VStack(alignment: .leading, spacing: 4) {
+                    if let card = checkIn.cards {
+                        Text(card.title)
+                            .font(.subheadline)
+                            .fontWeight(.medium)
+                            .foregroundStyle(.primary)
+                            .lineLimit(2)
+                    }
+                    if let note = checkIn.note, !note.isEmpty {
+                        Text(note)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                            .lineLimit(1)
+                    }
+                    Text(String(checkIn.createdAt.prefix(10)))
+                        .font(.caption2)
+                        .foregroundStyle(.tertiary)
                 }
-            }
-            if let note = checkIn.note, !note.isEmpty {
-                Text(note)
+                Spacer()
+                Image(systemName: "chevron.right")
                     .font(.caption)
-                    .foregroundStyle(.secondary)
-                    .lineLimit(3)
+                    .foregroundStyle(.tertiary)
             }
-            Text(String(checkIn.createdAt.prefix(10)))
-                .font(.caption2)
-                .foregroundStyle(.tertiary)
+            .padding(.vertical, 4)
         }
-        .padding(.vertical, 4)
+        .buttonStyle(.plain)
+        .sheet(isPresented: $showDetail) {
+            CheckInDetailSheet(
+                cardTitle: checkIn.cards?.title,
+                cardSymbol: checkIn.cards?.theme.symbolName,
+                note: checkIn.note,
+                photoUrl: checkIn.photoUrl.flatMap(URL.init),
+                date: String(checkIn.createdAt.prefix(10))
+            )
+        }
     }
 }
 
 struct CommunityRow: View {
     let checkIn: CommunityCheckIn
-    @State private var communityFullscreenURL: URL? = nil
+    @State private var showDetail = false
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            HStack {
-                Image(systemName: "person.circle.fill")
-                    .foregroundStyle(.secondary)
-                Text("漫游者")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+        Button { showDetail = true } label: {
+            HStack(spacing: 12) {
+                if let photoUrl = checkIn.photoUrl, let url = URL(string: photoUrl) {
+                    AsyncImage(url: url) { phase in
+                        if case .success(let img) = phase {
+                            img.resizable().scaledToFill()
+                        } else {
+                            Color(uiColor: .secondarySystemBackground)
+                        }
+                    }
+                    .frame(width: 60, height: 60)
+                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                } else if let card = checkIn.cards {
+                    RoundedRectangle(cornerRadius: 10)
+                        .fill(Color(uiColor: .secondarySystemBackground))
+                        .frame(width: 60, height: 60)
+                        .overlay(Image(systemName: card.theme.symbolName).foregroundStyle(.secondary))
+                }
+
+                VStack(alignment: .leading, spacing: 4) {
+                    if let card = checkIn.cards {
+                        Text(card.title)
+                            .font(.subheadline)
+                            .fontWeight(.medium)
+                            .foregroundStyle(.primary)
+                            .lineLimit(2)
+                    }
+                    if let note = checkIn.note, !note.isEmpty {
+                        Text(note)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                            .lineLimit(1)
+                    }
+                    Text(String(checkIn.createdAt.prefix(10)))
+                        .font(.caption2)
+                        .foregroundStyle(.tertiary)
+                }
                 Spacer()
-                Text(String(checkIn.createdAt.prefix(10)))
-                    .font(.caption2)
+                Image(systemName: "chevron.right")
+                    .font(.caption)
                     .foregroundStyle(.tertiary)
             }
-            if let card = checkIn.cards {
-                HStack(spacing: 6) {
-                    Image(systemName: card.theme.symbolName)
-                    Text(card.title)
-                        .font(.subheadline)
-                        .fontWeight(.medium)
-                        .lineLimit(2)
-                }
-            }
-            if let photoUrl = checkIn.photoUrl, let url = URL(string: photoUrl) {
-                AsyncImage(url: url) { phase in
-                    switch phase {
-                    case .success(let img):
-                        img.resizable()
-                            .scaledToFill()
-                            .frame(maxWidth: .infinity)
-                            .frame(height: 200)
-                            .clipShape(RoundedRectangle(cornerRadius: 12))
-                            .onTapGesture { communityFullscreenURL = url }
-                    case .failure:
-                        EmptyView()
-                    default:
-                        RoundedRectangle(cornerRadius: 12)
-                            .fill(Color(uiColor: .secondarySystemBackground))
-                            .frame(height: 200)
-                            .overlay(ProgressView())
+            .padding(.vertical, 4)
+        }
+        .buttonStyle(.plain)
+        .sheet(isPresented: $showDetail) {
+            CheckInDetailSheet(
+                cardTitle: checkIn.cards?.title,
+                cardSymbol: checkIn.cards?.theme.symbolName,
+                note: checkIn.note,
+                photoUrl: checkIn.photoUrl.flatMap(URL.init),
+                date: String(checkIn.createdAt.prefix(10)),
+                author: "漫游者"
+            )
+        }
+    }
+}
+
+// MARK: - Detail Sheet
+
+struct CheckInDetailSheet: View {
+    var cardTitle: String?
+    var cardSymbol: String?
+    var note: String?
+    var photoUrl: URL?
+    var date: String
+    var author: String? = nil
+    @State private var fullscreenURL: URL? = nil
+    @Environment(\.dismiss) private var dismiss
+
+    var body: some View {
+        NavigationStack {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 20) {
+                    // 作者行（社区）
+                    if let author {
+                        HStack(spacing: 8) {
+                            Image(systemName: "person.circle.fill")
+                                .foregroundStyle(.secondary)
+                            Text(author)
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
+                            Spacer()
+                            Text(date)
+                                .font(.caption)
+                                .foregroundStyle(.tertiary)
+                        }
+                    }
+
+                    // 卡片标题
+                    if let title = cardTitle {
+                        HStack(spacing: 8) {
+                            if let sym = cardSymbol {
+                                Image(systemName: sym)
+                                    .foregroundStyle(.secondary)
+                            }
+                            Text(title)
+                                .font(.title3)
+                                .fontWeight(.semibold)
+                        }
+                    }
+
+                    // 图片（可点击全屏）
+                    if let url = photoUrl {
+                        AsyncImage(url: url) { phase in
+                            switch phase {
+                            case .success(let img):
+                                img.resizable()
+                                    .scaledToFill()
+                                    .frame(maxWidth: .infinity)
+                                    .frame(height: 260)
+                                    .clipShape(RoundedRectangle(cornerRadius: 16))
+                                    .onTapGesture { fullscreenURL = url }
+                                    .overlay(alignment: .bottomTrailing) {
+                                        Image(systemName: "arrow.up.left.and.arrow.down.right")
+                                            .font(.caption)
+                                            .padding(6)
+                                            .background(.ultraThinMaterial)
+                                            .clipShape(RoundedRectangle(cornerRadius: 6))
+                                            .padding(10)
+                                    }
+                            case .failure:
+                                EmptyView()
+                            default:
+                                RoundedRectangle(cornerRadius: 16)
+                                    .fill(Color(uiColor: .secondarySystemBackground))
+                                    .frame(height: 260)
+                                    .overlay(ProgressView())
+                            }
+                        }
+                    }
+
+                    // 备注
+                    if let note, !note.isEmpty {
+                        Text(note)
+                            .font(.body)
+                            .foregroundStyle(.primary)
+                    }
+
+                    if author == nil {
+                        Text(date)
+                            .font(.caption)
+                            .foregroundStyle(.tertiary)
                     }
                 }
-                .fullScreenCover(item: $communityFullscreenURL) { url in
-                    PhotoFullscreenView(url: url)
+                .padding()
+            }
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("关闭") { dismiss() }
                 }
             }
-            if let note = checkIn.note, !note.isEmpty {
-                Text(note)
-                    .font(.body)
-                    .lineLimit(4)
+            .fullScreenCover(item: $fullscreenURL) { url in
+                PhotoFullscreenView(url: url)
             }
         }
-        .padding(.vertical, 6)
     }
 }
 
