@@ -144,6 +144,7 @@ struct LogView: View {
 struct MyLogView: View {
     @StateObject private var vm = LogViewModel()
     @EnvironmentObject var authStore: AuthStore
+    private let columns = [GridItem(.flexible(), spacing: 10), GridItem(.flexible(), spacing: 10)]
 
     var body: some View {
         Group {
@@ -162,10 +163,15 @@ struct MyLogView: View {
                     description: Text("完成一张漫步卡后打卡签到")
                 )
             } else {
-                List(vm.checkIns) { item in
-                    CheckInRow(checkIn: item)
+                ScrollView {
+                    LazyVGrid(columns: columns, spacing: 10) {
+                        ForEach(vm.checkIns) { item in
+                            CheckInCard(checkIn: item)
+                        }
+                    }
+                    .padding(.horizontal, 14)
+                    .padding(.top, 8)
                 }
-                .listStyle(.plain)
             }
         }
         .toolbar {
@@ -188,8 +194,8 @@ struct MyLogView: View {
             Button("全部") { vm.selectedTheme = nil }
             ForEach(Theme.allCases.filter { $0 != .random }, id: \.self) { theme in
                 Button { vm.selectedTheme = theme } label: {
-                Label(theme.label, systemImage: theme.symbolName)
-            }
+                    Label(theme.label, systemImage: theme.symbolName)
+                }
             }
         } label: {
             Image(systemName: "line.3.horizontal.decrease.circle")
@@ -201,6 +207,7 @@ struct MyLogView: View {
 
 struct CommunityView: View {
     @StateObject private var vm = CommunityViewModel()
+    private let columns = [GridItem(.flexible(), spacing: 10), GridItem(.flexible(), spacing: 10)]
 
     var body: some View {
         Group {
@@ -213,10 +220,15 @@ struct CommunityView: View {
                     description: Text("完成漫步后打卡，你的记录将出现在这里")
                 )
             } else {
-                List(vm.checkIns) { item in
-                    CommunityRow(checkIn: item)
+                ScrollView {
+                    LazyVGrid(columns: columns, spacing: 10) {
+                        ForEach(vm.checkIns) { item in
+                            CommunityCard(checkIn: item)
+                        }
+                    }
+                    .padding(.horizontal, 14)
+                    .padding(.top, 8)
                 }
-                .listStyle(.plain)
             }
         }
         .task { await vm.load() }
@@ -226,57 +238,44 @@ struct CommunityView: View {
     }
 }
 
-// MARK: - Rows
+// MARK: - Grid Cards
 
-struct CheckInRow: View {
+struct CheckInCard: View {
     let checkIn: CheckIn
     @State private var showDetail = false
 
     var body: some View {
         Button { showDetail = true } label: {
-            HStack(spacing: 12) {
-                // 缩略图或主题图标
-                if let photoUrl = checkIn.photoUrl, let url = URL(string: photoUrl) {
-                    AsyncImage(url: url) { phase in
-                        if case .success(let img) = phase {
-                            img.resizable().scaledToFill()
-                        } else {
-                            Color(uiColor: .secondarySystemBackground)
-                        }
-                    }
-                    .frame(width: 60, height: 60)
-                    .clipShape(RoundedRectangle(cornerRadius: 10))
-                } else if let card = checkIn.cards {
-                    RoundedRectangle(cornerRadius: 10)
-                        .fill(Color(uiColor: .secondarySystemBackground))
-                        .frame(width: 60, height: 60)
-                        .overlay(Image(systemName: card.theme.symbolName).foregroundStyle(.secondary))
-                }
+            VStack(alignment: .leading, spacing: 0) {
+                // 封面图
+                coverImage(url: checkIn.photoUrl.flatMap(URL.init), symbol: checkIn.cards?.theme.symbolName)
 
+                // 文字区
                 VStack(alignment: .leading, spacing: 4) {
-                    if let card = checkIn.cards {
-                        Text(card.title)
-                            .font(.subheadline)
+                    if let title = checkIn.cards?.title {
+                        Text(title)
+                            .font(.caption)
                             .fontWeight(.medium)
                             .foregroundStyle(.primary)
                             .lineLimit(2)
+                            .fixedSize(horizontal: false, vertical: true)
                     }
                     if let note = checkIn.note, !note.isEmpty {
                         Text(note)
-                            .font(.caption)
+                            .font(.caption2)
                             .foregroundStyle(.secondary)
-                            .lineLimit(1)
+                            .lineLimit(2)
                     }
                     Text(String(checkIn.createdAt.prefix(10)))
                         .font(.caption2)
                         .foregroundStyle(.tertiary)
                 }
-                Spacer()
-                Image(systemName: "chevron.right")
-                    .font(.caption)
-                    .foregroundStyle(.tertiary)
+                .padding(.horizontal, 8)
+                .padding(.vertical, 8)
             }
-            .padding(.vertical, 4)
+            .background(Color(uiColor: .systemBackground))
+            .clipShape(RoundedRectangle(cornerRadius: 14))
+            .shadow(color: .black.opacity(0.06), radius: 8, y: 2)
         }
         .buttonStyle(.plain)
         .sheet(isPresented: $showDetail) {
@@ -291,54 +290,45 @@ struct CheckInRow: View {
     }
 }
 
-struct CommunityRow: View {
+struct CommunityCard: View {
     let checkIn: CommunityCheckIn
     @State private var showDetail = false
 
     var body: some View {
         Button { showDetail = true } label: {
-            HStack(spacing: 12) {
-                if let photoUrl = checkIn.photoUrl, let url = URL(string: photoUrl) {
-                    AsyncImage(url: url) { phase in
-                        if case .success(let img) = phase {
-                            img.resizable().scaledToFill()
-                        } else {
-                            Color(uiColor: .secondarySystemBackground)
-                        }
-                    }
-                    .frame(width: 60, height: 60)
-                    .clipShape(RoundedRectangle(cornerRadius: 10))
-                } else if let card = checkIn.cards {
-                    RoundedRectangle(cornerRadius: 10)
-                        .fill(Color(uiColor: .secondarySystemBackground))
-                        .frame(width: 60, height: 60)
-                        .overlay(Image(systemName: card.theme.symbolName).foregroundStyle(.secondary))
-                }
+            VStack(alignment: .leading, spacing: 0) {
+                coverImage(url: checkIn.photoUrl.flatMap(URL.init), symbol: checkIn.cards?.theme.symbolName)
 
                 VStack(alignment: .leading, spacing: 4) {
-                    if let card = checkIn.cards {
-                        Text(card.title)
-                            .font(.subheadline)
+                    if let title = checkIn.cards?.title {
+                        Text(title)
+                            .font(.caption)
                             .fontWeight(.medium)
                             .foregroundStyle(.primary)
                             .lineLimit(2)
+                            .fixedSize(horizontal: false, vertical: true)
                     }
                     if let note = checkIn.note, !note.isEmpty {
                         Text(note)
-                            .font(.caption)
+                            .font(.caption2)
                             .foregroundStyle(.secondary)
-                            .lineLimit(1)
+                            .lineLimit(2)
                     }
-                    Text(String(checkIn.createdAt.prefix(10)))
-                        .font(.caption2)
-                        .foregroundStyle(.tertiary)
+                    HStack(spacing: 4) {
+                        Image(systemName: "person.circle.fill")
+                            .font(.caption2)
+                            .foregroundStyle(.tertiary)
+                        Text("漫游者")
+                            .font(.caption2)
+                            .foregroundStyle(.tertiary)
+                    }
                 }
-                Spacer()
-                Image(systemName: "chevron.right")
-                    .font(.caption)
-                    .foregroundStyle(.tertiary)
+                .padding(.horizontal, 8)
+                .padding(.vertical, 8)
             }
-            .padding(.vertical, 4)
+            .background(Color(uiColor: .systemBackground))
+            .clipShape(RoundedRectangle(cornerRadius: 14))
+            .shadow(color: .black.opacity(0.06), radius: 8, y: 2)
         }
         .buttonStyle(.plain)
         .sheet(isPresented: $showDetail) {
@@ -351,6 +341,36 @@ struct CommunityRow: View {
                 author: "漫游者"
             )
         }
+    }
+}
+
+@ViewBuilder
+private func coverImage(url: URL?, symbol: String?) -> some View {
+    if let url {
+        AsyncImage(url: url) { phase in
+            switch phase {
+            case .success(let img):
+                img.resizable().scaledToFill()
+            default:
+                Color(uiColor: .secondarySystemBackground)
+                    .overlay(ProgressView())
+            }
+        }
+        .frame(maxWidth: .infinity)
+        .frame(height: 160)
+        .clipShape(UnevenRoundedRectangle(topLeadingRadius: 14, topTrailingRadius: 14))
+    } else {
+        Color(uiColor: .secondarySystemBackground)
+            .frame(maxWidth: .infinity)
+            .frame(height: 110)
+            .clipShape(UnevenRoundedRectangle(topLeadingRadius: 14, topTrailingRadius: 14))
+            .overlay {
+                if let symbol {
+                    Image(systemName: symbol)
+                        .font(.title2)
+                        .foregroundStyle(.tertiary)
+                }
+            }
     }
 }
 

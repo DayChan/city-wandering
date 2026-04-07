@@ -3,6 +3,7 @@ import SwiftUI
 struct RootView: View {
     @EnvironmentObject var authStore: AuthStore
     @State private var showProfile = false
+    @AppStorage("colorScheme") private var colorSchemeRaw: String = "system"
 
     var body: some View {
         TabView {
@@ -17,6 +18,7 @@ struct RootView: View {
                 }
         }
         .tint(.primary)
+        .preferredColorScheme(colorSchemeRaw == "light" ? .light : colorSchemeRaw == "dark" ? .dark : nil)
         .sheet(isPresented: $showProfile) {
             ProfileView()
                 .environmentObject(authStore)
