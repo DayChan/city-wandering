@@ -76,6 +76,7 @@ struct HomeView: View {
                 .padding(.horizontal, 20)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .layoutPriority(1)
+                .zIndex(0)
 
                 // 底部操作区
                 VStack(spacing: 10) {
@@ -139,6 +140,8 @@ struct HomeView: View {
                 .padding(.top, 12)
                 .padding(.bottom, 16)
                 .animation(.spring(response: 0.4, dampingFraction: 0.8), value: vm.card != nil)
+                .zIndex(1)
+                .background(Color(uiColor: .systemBackground))
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .navigationBarTitleDisplayMode(.inline)
