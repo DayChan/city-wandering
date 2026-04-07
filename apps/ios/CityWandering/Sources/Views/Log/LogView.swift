@@ -347,17 +347,14 @@ struct CommunityCard: View {
 @ViewBuilder
 private func coverImage(url: URL?, symbol: String?) -> some View {
     if let url {
-        AsyncImage(url: url) { phase in
-            switch phase {
-            case .success(let img):
-                img.resizable()
-                    .scaledToFit()
-                    .frame(maxWidth: .infinity)
-            default:
-                Color(uiColor: .secondarySystemBackground)
-                    .aspectRatio(4/3, contentMode: .fit)
-                    .overlay(ProgressView())
-            }
+        CachedAsyncImage(url: url) { img in
+            img.resizable()
+                .scaledToFit()
+                .frame(maxWidth: .infinity)
+        } placeholder: {
+            Color(uiColor: .secondarySystemBackground)
+                .aspectRatio(4/3, contentMode: .fit)
+                .overlay(ProgressView().scaleEffect(0.7))
         }
         .clipShape(UnevenRoundedRectangle(topLeadingRadius: 14, topTrailingRadius: 14))
     } else {
@@ -420,31 +417,27 @@ struct CheckInDetailSheet: View {
 
                     // 图片（可点击全屏）
                     if let url = photoUrl {
-                        AsyncImage(url: url) { phase in
-                            switch phase {
-                            case .success(let img):
-                                img.resizable()
-                                    .scaledToFill()
-                                    .frame(maxWidth: .infinity)
-                                    .frame(height: 260)
-                                    .clipShape(RoundedRectangle(cornerRadius: 16))
-                                    .onTapGesture { fullscreenURL = url }
-                                    .overlay(alignment: .bottomTrailing) {
-                                        Image(systemName: "arrow.up.left.and.arrow.down.right")
-                                            .font(.caption)
-                                            .padding(6)
-                                            .background(.ultraThinMaterial)
-                                            .clipShape(RoundedRectangle(cornerRadius: 6))
-                                            .padding(10)
-                                    }
-                            case .failure:
-                                EmptyView()
-                            default:
-                                RoundedRectangle(cornerRadius: 16)
-                                    .fill(Color(uiColor: .secondarySystemBackground))
-                                    .frame(height: 260)
+                        CachedAsyncImage(url: url) { img in
+                            img.resizable()
+                                .scaledToFill()
+                                .frame(maxWidth: .infinity)
+                                .frame(height: 260)
+                                .clipShape(RoundedRectangle(cornerRadius: 16))
+                                .onTapGesture { fullscreenURL = url }
+                                .overlay(alignment: .bottomTrailing) {
+                                    Image(systemName: "arrow.up.left.and.arrow.down.right")
+                                        .font(.caption)
+                                        .padding(6)
+                                        .background(.ultraThinMaterial)
+                                        .clipShape(RoundedRectangle(cornerRadius: 6))
+                                        .padding(10)
+                                }
+                        } placeholder: {
+                            RoundedRectangle(cornerRadius: 16)
+                                .fill(Color(uiColor: .secondarySystemBackground))
+                                .frame(height: 260)
                                     .overlay(ProgressView())
-                            }
+                                .overlay(ProgressView())
                         }
                     }
 
@@ -489,15 +482,12 @@ struct PhotoFullscreenView: View {
     var body: some View {
         ZStack(alignment: .topTrailing) {
             Color.black.ignoresSafeArea()
-            AsyncImage(url: url) { phase in
-                switch phase {
-                case .success(let img):
-                    img.resizable()
-                        .scaledToFit()
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                default:
-                    ProgressView().tint(.white)
-                }
+            CachedAsyncImage(url: url) { img in
+                img.resizable()
+                    .scaledToFit()
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+            } placeholder: {
+                ProgressView().tint(.white)
             }
             Button {
                 dismiss()

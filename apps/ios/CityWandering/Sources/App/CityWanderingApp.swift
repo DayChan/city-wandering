@@ -7,6 +7,7 @@ struct CityWanderingApp: App {
 
     var body: some Scene {
         WindowGroup {
+            let _ = ImageCache.shared  // 启动时初始化 URLCache
             RootView()
                 .environmentObject(authStore)
                 .environmentObject(locationStore)

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		14EB3505BA806EF086409D5A /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECB216BA27D60D0AD11E6BD4 /* ImageCache.swift */; };
 		2EC615B374BFEB812DAA87BA /* CardShareSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 168F4270006E4844FBCBB701 /* CardShareSheet.swift */; };
 		331F1E4F5306CDB861B1987A /* CheckInSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A0E44BAB32C667351FCCE2C /* CheckInSheet.swift */; };
 		42AA8E39EF1E6C8F909D4ED1 /* City.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1558A29F3F0F5A9D78262E8 /* City.swift */; };
@@ -48,6 +49,7 @@
 		A1558A29F3F0F5A9D78262E8 /* City.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = City.swift; sourceTree = "<group>"; };
 		B3CA71272B21D5FE8A2467C9 /* CitySelectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CitySelectorView.swift; sourceTree = "<group>"; };
 		C6CF4087C707124DC829AD68 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		ECB216BA27D60D0AD11E6BD4 /* ImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
 		ED399A4F7FC69DD5BD6962A4 /* ThemePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemePickerView.swift; sourceTree = "<group>"; };
 		F81A7DC5FF5D209BC5FF0C29 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		FE0AA7BD1A8D5C168947FA83 /* CityWanderingApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CityWanderingApp.swift; sourceTree = "<group>"; };
@@ -88,6 +90,7 @@
 			isa = PBXGroup;
 			children = (
 				0EBB649ACD46D0B3F4315E75 /* CardService.swift */,
+				ECB216BA27D60D0AD11E6BD4 /* ImageCache.swift */,
 				9B4F729FD222533909963448 /* SupabaseService.swift */,
 			);
 			path = Services;
@@ -280,6 +283,7 @@
 				BEE2C54CF7E7F7CA49ACE2CD /* CityWanderingApp.swift in Sources */,
 				644EE1ECC17268AFECB7488E /* FlowingBackground.swift in Sources */,
 				D437E3D53DCC7EC648C5AC3E /* HomeView.swift in Sources */,
+				14EB3505BA806EF086409D5A /* ImageCache.swift in Sources */,
 				DB259BBDF441B98A77AD4F80 /* LocationStore.swift in Sources */,
 				D9C4D3D1C72364F5FA104D93 /* LogView.swift in Sources */,
 				61D4A2CFE285A2D5FB7BA525 /* ProfileView.swift in Sources */,
