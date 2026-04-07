@@ -61,6 +61,7 @@ struct HomeView: View {
                     // 主题选择器
                     ThemePickerView(selected: $vm.selectedTheme)
                         .padding(.top, 8)
+                        .padding(.bottom, 16)
 
                     // 卡片区域 — 充满剩余空间
                     ZStack {
@@ -76,7 +77,7 @@ struct HomeView: View {
                         }
                     }
                     .frame(maxWidth: .infinity)
-                    .frame(height: geo.size.height - 220) // 留底部操作区
+                    .frame(height: geo.size.height - 248)
                     .clipped()
 
                     Spacer(minLength: 0)
