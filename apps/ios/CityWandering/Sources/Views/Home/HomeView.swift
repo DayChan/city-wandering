@@ -60,9 +60,9 @@ struct HomeView: View {
                 // 主题选择器
                 ThemePickerView(selected: $vm.selectedTheme)
                     .padding(.top, 8)
-                    .padding(.bottom, 16)
+                    .padding(.bottom, 12)
 
-                // 卡片
+                // 卡片 — 自动充满剩余空间
                 ZStack {
                     if let card = vm.card {
                         CardFlipView(card: card)
@@ -74,10 +74,8 @@ struct HomeView: View {
                     }
                 }
                 .padding(.horizontal, 20)
-                .frame(maxWidth: .infinity)
-                .frame(height: 360)
-
-                Spacer()
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .layoutPriority(1)
 
                 // 底部操作区
                 VStack(spacing: 10) {
@@ -138,9 +136,11 @@ struct HomeView: View {
                     }
                 }
                 .padding(.horizontal, 20)
+                .padding(.top, 12)
                 .padding(.bottom, 16)
                 .animation(.spring(response: 0.4, dampingFraction: 0.8), value: vm.card != nil)
             }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
