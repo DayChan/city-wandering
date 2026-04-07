@@ -139,6 +139,7 @@ struct HomeView: View {
                 .padding(.horizontal, 20)
                 .padding(.top, 12)
                 .padding(.bottom, 16)
+                .background(.ultraThinMaterial)
                 .animation(.spring(response: 0.4, dampingFraction: 0.8), value: vm.card != nil)
                 .zIndex(0)
             }

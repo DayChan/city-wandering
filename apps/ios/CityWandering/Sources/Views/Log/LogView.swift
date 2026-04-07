@@ -273,9 +273,9 @@ struct CheckInCard: View {
                 .padding(.horizontal, 8)
                 .padding(.vertical, 8)
             }
-            .background(Color(uiColor: .systemBackground))
+            .background(.ultraThinMaterial)
             .clipShape(RoundedRectangle(cornerRadius: 14))
-            .shadow(color: .black.opacity(0.06), radius: 8, y: 2)
+            .shadow(color: .black.opacity(0.08), radius: 10, y: 3)
         }
         .buttonStyle(.plain)
         .sheet(isPresented: $showDetail) {
@@ -326,9 +326,9 @@ struct CommunityCard: View {
                 .padding(.horizontal, 8)
                 .padding(.vertical, 8)
             }
-            .background(Color(uiColor: .systemBackground))
+            .background(.ultraThinMaterial)
             .clipShape(RoundedRectangle(cornerRadius: 14))
-            .shadow(color: .black.opacity(0.06), radius: 8, y: 2)
+            .shadow(color: .black.opacity(0.08), radius: 10, y: 3)
         }
         .buttonStyle(.plain)
         .sheet(isPresented: $showDetail) {

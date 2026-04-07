@@ -14,6 +14,7 @@
 		528F61EE33ECDC8A33C6DF99 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 037EE019A14CBCE4C0820FFC /* RootView.swift */; };
 		5D7BBBBF8E354DF557181608 /* CityPillButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36F346A10E1E7015270B34A2 /* CityPillButton.swift */; };
 		61D4A2CFE285A2D5FB7BA525 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6CF4087C707124DC829AD68 /* ProfileView.swift */; };
+		644EE1ECC17268AFECB7488E /* FlowingBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468DF047E208803146F7492E /* FlowingBackground.swift */; };
 		6F595AD0A3FF0D87E4F523E6 /* CitySelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3CA71272B21D5FE8A2467C9 /* CitySelectorView.swift */; };
 		8C1D05E848779E02B78F0A91 /* ThemePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED399A4F7FC69DD5BD6962A4 /* ThemePickerView.swift */; };
 		9D048E6576CCE5CB3A5EE529 /* CardFlipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40984F9A8CC11CF435A243B7 /* CardFlipView.swift */; };
@@ -33,7 +34,7 @@
 		0EBB649ACD46D0B3F4315E75 /* CardService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardService.swift; sourceTree = "<group>"; };
 		14DAD80F90AADD790CF6AD9C /* AuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthView.swift; sourceTree = "<group>"; };
 		168F4270006E4844FBCBB701 /* CardShareSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardShareSheet.swift; sourceTree = "<group>"; };
-		1D2BA5626288BBEE9C287BE2 /* CityWandering.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CityWandering.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1D2BA5626288BBEE9C287BE2 /* CityWandering.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = CityWandering.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2C9674462EBD95BDC6CEF04A /* AuthStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthStore.swift; sourceTree = "<group>"; };
 		36F346A10E1E7015270B34A2 /* CityPillButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CityPillButton.swift; sourceTree = "<group>"; };
 		39665B5664D671EA9B45BD9A /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
@@ -41,6 +42,7 @@
 		3BA8BD8386D7D93574188609 /* LocationStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationStore.swift; sourceTree = "<group>"; };
 		3F3A0E29A95E28F57811A876 /* LogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogView.swift; sourceTree = "<group>"; };
 		40984F9A8CC11CF435A243B7 /* CardFlipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardFlipView.swift; sourceTree = "<group>"; };
+		468DF047E208803146F7492E /* FlowingBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlowingBackground.swift; sourceTree = "<group>"; };
 		6D8F1AD9287400BAACD518BE /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
 		9B4F729FD222533909963448 /* SupabaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseService.swift; sourceTree = "<group>"; };
 		A1558A29F3F0F5A9D78262E8 /* City.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = City.swift; sourceTree = "<group>"; };
@@ -76,6 +78,7 @@
 			isa = PBXGroup;
 			children = (
 				36F346A10E1E7015270B34A2 /* CityPillButton.swift */,
+				468DF047E208803146F7492E /* FlowingBackground.swift */,
 				ED399A4F7FC69DD5BD6962A4 /* ThemePickerView.swift */,
 			);
 			path = Components;
@@ -275,6 +278,7 @@
 				5D7BBBBF8E354DF557181608 /* CityPillButton.swift in Sources */,
 				6F595AD0A3FF0D87E4F523E6 /* CitySelectorView.swift in Sources */,
 				BEE2C54CF7E7F7CA49ACE2CD /* CityWanderingApp.swift in Sources */,
+				644EE1ECC17268AFECB7488E /* FlowingBackground.swift in Sources */,
 				D437E3D53DCC7EC648C5AC3E /* HomeView.swift in Sources */,
 				DB259BBDF441B98A77AD4F80 /* LocationStore.swift in Sources */,
 				D9C4D3D1C72364F5FA104D93 /* LogView.swift in Sources */,
@@ -295,7 +299,6 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = CNK2947SK9;
 				INFOPLIST_FILE = CityWandering/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -435,7 +438,6 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = CNK2947SK9;
 				INFOPLIST_FILE = CityWandering/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
