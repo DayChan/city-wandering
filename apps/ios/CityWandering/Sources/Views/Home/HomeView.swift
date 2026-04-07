@@ -56,98 +56,90 @@ struct HomeView: View {
 
     var body: some View {
         NavigationStack {
-            GeometryReader { geo in
-                VStack(spacing: 0) {
-                    // 主题选择器
-                    ThemePickerView(selected: $vm.selectedTheme)
-                        .padding(.top, 8)
-                        .padding(.bottom, 16)
+            VStack(spacing: 0) {
+                // 主题选择器
+                ThemePickerView(selected: $vm.selectedTheme)
+                    .padding(.top, 8)
+                    .padding(.bottom, 16)
 
-                    // 卡片区域 — 充满剩余空间
-                    ZStack {
-                        if let card = vm.card {
-                            CardFlipView(card: card)
-                                .padding(.horizontal, 20)
-                                .offset(y: vm.cardOffset)
-                                .scaleEffect(vm.cardScale)
-                                .opacity(vm.cardOpacity)
-                        } else {
-                            CardPlaceholderView()
-                                .padding(.horizontal, 20)
-                        }
+                // 卡片
+                ZStack {
+                    if let card = vm.card {
+                        CardFlipView(card: card)
+                            .offset(y: vm.cardOffset)
+                            .scaleEffect(vm.cardScale)
+                            .opacity(vm.cardOpacity)
+                    } else {
+                        CardPlaceholderView()
                     }
-                    .frame(maxWidth: .infinity)
-                    .frame(height: geo.size.height - 248)
-                    .clipped()
-
-                    Spacer(minLength: 0)
-
-                    // 底部操作区
-                    VStack(spacing: 10) {
-                        // 打卡 + 分享（仅抽到卡后显示）
-                        if vm.card != nil {
-                            HStack(spacing: 10) {
-                                Button {
-                                    if authStore.user != nil { vm.showCheckIn = true }
-                                } label: {
-                                    Label("打卡", systemImage: "mappin.circle.fill")
-                                        .font(.subheadline).fontWeight(.medium)
-                                        .frame(maxWidth: .infinity).frame(height: 46)
-                                        .background(Color(uiColor: .secondarySystemBackground))
-                                        .foregroundStyle(authStore.user != nil ? .primary : .secondary)
-                                        .clipShape(RoundedRectangle(cornerRadius: 14))
-                                }
-                                Button { vm.showShare = true } label: {
-                                    Label("分享", systemImage: "square.and.arrow.up")
-                                        .font(.subheadline).fontWeight(.medium)
-                                        .frame(maxWidth: .infinity).frame(height: 46)
-                                        .background(Color(uiColor: .secondarySystemBackground))
-                                        .foregroundStyle(.primary)
-                                        .clipShape(RoundedRectangle(cornerRadius: 14))
-                                }
-                            }
-                            .padding(.horizontal, 20)
-                            .transition(.move(edge: .bottom).combined(with: .opacity))
-                        }
-
-                        // 抽卡按钮
-                        Button {
-                            Task { await vm.draw(city: locationStore.city?.slug) }
-                        } label: {
-                            ZStack {
-                                if vm.isLoading {
-                                    HStack(spacing: 8) {
-                                        ProgressView().tint(.white).scaleEffect(0.85)
-                                        Text("抽取中…").fontWeight(.semibold)
-                                    }
-                                } else {
-                                    Label(vm.card == nil ? "抽一张" : "再抽一张",
-                                          systemImage: "rectangle.on.rectangle.angled")
-                                        .fontWeight(.semibold)
-                                }
-                            }
-                            .frame(maxWidth: .infinity)
-                            .frame(height: 54)
-                            .background(Color.primary)
-                            .foregroundStyle(Color(uiColor: .systemBackground))
-                            .clipShape(RoundedRectangle(cornerRadius: 17))
-                        }
-                        .disabled(vm.isLoading)
-                        .padding(.horizontal, 20)
-                        .scaleEffect(vm.isLoading ? 0.97 : 1.0)
-                        .animation(.easeInOut(duration: 0.15), value: vm.isLoading)
-
-                        if let error = vm.errorMessage {
-                            Text(error)
-                                .font(.caption)
-                                .foregroundStyle(.red)
-                                .multilineTextAlignment(.center)
-                                .padding(.horizontal, 20)
-                        }
-                    }
-                    .padding(.bottom, geo.safeAreaInsets.bottom > 0 ? 8 : 20)
-                    .animation(.spring(response: 0.4, dampingFraction: 0.8), value: vm.card != nil)
                 }
+                .padding(.horizontal, 20)
+                .frame(maxWidth: .infinity)
+                .frame(height: 360)
+
+                Spacer()
+
+                // 底部操作区
+                VStack(spacing: 10) {
+                    if vm.card != nil {
+                        HStack(spacing: 10) {
+                            Button {
+                                if authStore.user != nil { vm.showCheckIn = true }
+                            } label: {
+                                Label("打卡", systemImage: "mappin.circle.fill")
+                                    .font(.subheadline).fontWeight(.medium)
+                                    .frame(maxWidth: .infinity).frame(height: 46)
+                                    .background(Color(uiColor: .secondarySystemBackground))
+                                    .foregroundStyle(authStore.user != nil ? .primary : .secondary)
+                                    .clipShape(RoundedRectangle(cornerRadius: 14))
+                            }
+                            Button { vm.showShare = true } label: {
+                                Label("分享", systemImage: "square.and.arrow.up")
+                                    .font(.subheadline).fontWeight(.medium)
+                                    .frame(maxWidth: .infinity).frame(height: 46)
+                                    .background(Color(uiColor: .secondarySystemBackground))
+                                    .foregroundStyle(.primary)
+                                    .clipShape(RoundedRectangle(cornerRadius: 14))
+                            }
+                        }
+                        .transition(.move(edge: .bottom).combined(with: .opacity))
+                    }
+
+                    Button {
+                        Task { await vm.draw(city: locationStore.city?.slug) }
+                    } label: {
+                        ZStack {
+                            if vm.isLoading {
+                                HStack(spacing: 8) {
+                                    ProgressView().tint(.white).scaleEffect(0.85)
+                                    Text("抽取中…").fontWeight(.semibold)
+                                }
+                            } else {
+                                Label(vm.card == nil ? "抽一张" : "再抽一张",
+                                      systemImage: "rectangle.on.rectangle.angled")
+                                    .fontWeight(.semibold)
+                            }
+                        }
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 54)
+                        .background(Color.primary)
+                        .foregroundStyle(Color(uiColor: .systemBackground))
+                        .clipShape(RoundedRectangle(cornerRadius: 17))
+                    }
+                    .disabled(vm.isLoading)
+                    .scaleEffect(vm.isLoading ? 0.97 : 1.0)
+                    .animation(.easeInOut(duration: 0.15), value: vm.isLoading)
+
+                    if let error = vm.errorMessage {
+                        Text(error)
+                            .font(.caption)
+                            .foregroundStyle(.red)
+                            .multilineTextAlignment(.center)
+                    }
+                }
+                .padding(.horizontal, 20)
+                .padding(.bottom, 16)
+                .animation(.spring(response: 0.4, dampingFraction: 0.8), value: vm.card != nil)
             }
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
