@@ -29,6 +29,7 @@ class HomeViewModel: ObservableObject {
 }
 
 struct HomeView: View {
+    @Binding var showProfile: Bool
     @StateObject private var vm = HomeViewModel()
     @EnvironmentObject var locationStore: LocationStore
     @EnvironmentObject var authStore: AuthStore
@@ -132,6 +133,14 @@ struct HomeView: View {
                 ToolbarItem(placement: .topBarLeading) {
                     CityPillButton(store: locationStore) {
                         vm.showCitySelector = true
+                    }
+                }
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        showProfile = true
+                    } label: {
+                        Image(systemName: authStore.user != nil ? "person.crop.circle.fill" : "person.crop.circle")
+                            .foregroundStyle(authStore.user != nil ? .primary : .secondary)
                     }
                 }
             }

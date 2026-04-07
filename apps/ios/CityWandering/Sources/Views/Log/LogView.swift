@@ -106,6 +106,7 @@ class CommunityViewModel: ObservableObject {
 struct LogView: View {
     @EnvironmentObject var authStore: AuthStore
     @State private var tab = 0
+    @State private var showProfile = false
 
     var body: some View {
         NavigationStack {
@@ -125,8 +126,19 @@ struct LogView: View {
                     CommunityView()
                 }
             }
-            .navigationTitle("漫步日志")
+            .navigationTitle("漫志")
             .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button { showProfile = true } label: {
+                        Image(systemName: authStore.user != nil ? "person.crop.circle.fill" : "person.crop.circle")
+                            .foregroundStyle(authStore.user != nil ? .primary : .secondary)
+                    }
+                }
+            }
+            .sheet(isPresented: $showProfile) {
+                ProfileView().environmentObject(authStore)
+            }
         }
     }
 }
