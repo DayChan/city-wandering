@@ -12,7 +12,10 @@ struct CityWanderingApp: App {
                 .environmentObject(locationStore)
                 .task {
                     await authStore.restoreSession()
+                    // 模拟器无真实 IP，跳过静默检测；真机会正常走 IP 推断
+                    #if !targetEnvironment(simulator)
                     await locationStore.detectFromIP()
+                    #endif
                 }
         }
     }
